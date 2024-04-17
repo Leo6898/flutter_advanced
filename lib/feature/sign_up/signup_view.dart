@@ -2,98 +2,97 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_flutter06012024/feature/sign_up/signup_controller.dart';
 
-void main() {
-  runApp(const SignUpPage());
-}
-
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({super.key});
+class SignupPage extends StatelessWidget {
+  const SignupPage({super.key, required this.title});
+  final String title;
 
   @override
   Widget build(BuildContext context) {
-    final controllerSignUp = Get.put(SignUpController());
+    final controller = Get.find<SignupController>();
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Padding(
-            padding: EdgeInsets.all(100.0),
-            child: Text('Đăng Ký'),
-          ),
-        ),
-        body: SafeArea(
-          child: Form(
-            key: controllerSignUp.formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    //Tao textfield username
-                    TextFormField(
-                      autovalidateMode: AutovalidateMode.always,
-                      controller: controllerSignUp.usernameSignController,
-                      decoration: const InputDecoration(labelText: 'Username'),
-                      onChanged: (value) {
-                        controllerSignUp.onChangeUsername(value);
-                      },
-                      validator: controllerSignUp.validatorUsername,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(title),
+      ),
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  // user name
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    controller: controller.emailController,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      fillColor: Colors.grey.shade200,
+                      filled: true,
+                      hintText: 'Email',
                     ),
-                    //Tao textfield password
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: controllerSignUp.passwordSignController,
-                      obscureText: true,
-                      decoration: const InputDecoration(labelText: 'Password'),
-                      onChanged: (value) {},
-                      validator: controllerSignUp.validatorPassword,
+                    validator: controller.emailValidator,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  //password
+                  TextFormField(
+                    controller: controller.passwordController,
+                    decoration: InputDecoration(
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      fillColor: Colors.grey.shade200,
+                      filled: true,
+                      hintText: 'Password',
                     ),
-                    //Tao textfiled confirmPassword
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller:
-                          controllerSignUp.confirmPasswordSignController,
-                      obscureText: true,
-                      decoration:
-                          const InputDecoration(labelText: 'Nhập lại Password'),
-                      onChanged: (value) {
-                        controllerSignUp.onChangePassword(value);
-                      },
-                      validator: controllerSignUp.validatorConfirmPassword,
+                  ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  // button login
+                  Center(
+                    child: ElevatedButton(
+                      // onPressed: controller.onSubmitLogin,
+                      onPressed: controller.onSubmit,
+                      child: const Text(
+                        'Signup',
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    //Tao textfield ho ten
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: controllerSignUp.fullNameSignController,
-                      decoration: const InputDecoration(labelText: 'Họ tên'),
-                      onChanged: (value) {
-                        controllerSignUp.onChangeFullNam(value);
-                      },
-                      validator: (value) =>
-                          controllerSignUp.validatorRequired(value, 'Họ tên'),
-                    ),
-                    //Tao textfield dia chi
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: controllerSignUp.addressSignController,
-                      decoration: const InputDecoration(labelText: 'Địa chỉ'),
-                      onChanged: (value) {},
-                      validator: (value) =>
-                          controllerSignUp.validatorRequired(value, 'Địa chỉ'),
-                    ),
-                    //Tao nut dang ky
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: controllerSignUp.onSubmitSignUp,
-                      child: const Text('Đăng Ký'),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        ),
+          Obx(
+            () => (controller.isLoading.value)
+                ? Container(
+                    color: Colors.black.withOpacity(0.8),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.blue,
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          )
+        ],
       ),
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

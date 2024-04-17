@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:test_flutter06012024/feature/homepage/home_binding.dart';
 import 'package:test_flutter06012024/feature/homepage/home_view.dart';
 import 'package:test_flutter06012024/feature/login/login_binding.dart';
 import 'package:test_flutter06012024/feature/sign_up/signup_view.dart';
@@ -17,10 +18,18 @@ class AppRouter {
     //SignUp
     GetPage(
       name: AppRouterNamed.signUp,
-      page: () => const SignUpPage(),
+      page: () => const SignupPage(
+        title: '',
+      ),
     ),
     //HomePage
-    GetPage(name: AppRouterNamed.homepage, page: () => const HomePage())
+    GetPage(
+      name: AppRouterNamed.homepage,
+      page: () => const HomePage(
+        title: '',
+      ),
+      binding: HomeBinding(),
+    ),
   ];
 }
 

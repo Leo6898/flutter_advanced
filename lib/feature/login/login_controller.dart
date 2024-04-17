@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:test_flutter06012024/feature/homepage/home_argument.dart';
-import 'package:test_flutter06012024/feature/model/data_state.dart';
-import 'package:test_flutter06012024/feature/model/login_request.dart';
-import 'package:test_flutter06012024/feature/network/repositories/login_reponsitory.dart';
 import 'package:test_flutter06012024/feature/router/router.dart';
-import '../sign_up/signup_view.dart';
 
 class LoginController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final showPassword = false.obs;
-
   final isloading = false.obs;
 
   void onChangedUsername(username) {
@@ -43,28 +37,30 @@ class LoginController extends GetxController {
   }
 
   onSubmitLogin() async {
-    final emailValue = emailController.text;
-    final passwordValue = passwordController.text;
+    Get.toNamed(AppRouterNamed.homepage);
 
-    final LoginRequest loginRequest =
-        LoginRequest(email: emailValue, password: passwordValue);
+    // final emailValue = emailController.text;
+    // final passwordValue = passwordController.text;
 
-    isloading.value = true;
-    final loginReponseFromRepo = await LoginRepository().login(loginRequest);
-    isloading.value = false;
-    if (loginReponseFromRepo is DataSuccess) {
-      Get.toNamed(
-        AppRouterNamed.homepage,
-        arguments: HomeArguments(
-          username: emailController.text,
-          password: passwordController.text,
-        ),
-      );
-    }
+    // final LoginRequest loginRequest =
+    //     LoginRequest(email: emailValue, password: passwordValue);
 
-    if (loginReponseFromRepo is DataFailed) {
-      _showErrorLoginDialog();
-    }
+    // isloading.value = true;
+    // final loginReponseFromRepo = await LoginRepository().login(loginRequest);
+    // isloading.value = false;
+    // if (loginReponseFromRepo is DataSuccess) {
+    //   Get.toNamed(
+    //     AppRouterNamed.homepage,
+    //     arguments: HomeArguments(
+    //       username: emailController.text,
+    //       password: passwordController.text,
+    //     ),
+    //   );
+    // }
+
+    // if (loginReponseFromRepo is DataFailed) {
+    //   _showErrorLoginDialog();
+    // }
   }
 
   Future<dynamic> _showErrorLoginDialog() {
@@ -96,7 +92,7 @@ class LoginController extends GetxController {
     );
   }
 
-  void onPressedSignUp() {
-    Get.to(const SignUpPage());
-  }
+  // void onPressedSignUp() {
+  //   Get.to(const SignUpPage());
+  // }
 }
